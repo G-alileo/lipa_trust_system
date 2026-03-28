@@ -8,6 +8,8 @@ class CampaignStatus(str, Enum):
     COMPLETED = "COMPLETED"
     CANCELLED = "CANCELLED"
     FAILED = "FAILED"
+    REFUND_PENDING = "REFUND_PENDING"
+    REFUNDED = "REFUNDED"
 
 
 class ContributionStatus(str, Enum):

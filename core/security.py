@@ -1,8 +1,11 @@
+import logging
 from datetime import datetime, timedelta
 from typing import Optional
 
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+
+logging.getLogger("passlib").setLevel(logging.ERROR)
 
 SECRET_KEY = "your-secret-key-change-in-production"
 ALGORITHM = "HS256"

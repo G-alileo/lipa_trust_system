@@ -21,11 +21,24 @@ class STKPushResponse:
     customer_message: str
 
 
+@dataclass
+class B2CResponse:
+    conversation_id: str
+    originator_conversation_id: str
+    response_code: str
+    response_description: str
+    success: bool
+
+
 class PaymentError(Exception):
     pass
 
 
 class InvalidCallbackPayloadError(PaymentError):
+    pass
+
+
+class B2CError(PaymentError):
     pass
 
 
@@ -110,3 +123,28 @@ class PaymentService:
                     result["phone_number"] = str(value)
 
         return result
+
+    @staticmethod
+    def initiate_b2c_refund(
+        phone_number: str,
+        amount: Decimal,
+        remarks: str = "Refund"
+    ) -> B2CResponse:
+        conversation_id = f"AG_{uuid.uuid4().hex[:20].upper()}"
+        originator_id = f"org_{uuid.uuid4().hex[:16].upper()}"
+
+        return B2CResponse(
+            conversation_id=conversation_id,
+            originator_conversation_id=originator_id,
+            response_code="0",
+            response_description="Accept the service request successfully.",
+            success=True
+        )
+
+    @staticmethod
+    def query_transaction_status(transaction_id: str) -> dict[str, Any]:
+        return {
+            "result_code": "0",
+            "result_desc": "The service request is processed successfully.",
+            "transaction_status": "Completed"
+        }

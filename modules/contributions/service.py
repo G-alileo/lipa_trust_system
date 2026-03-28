@@ -205,6 +205,28 @@ class ContributionService:
             .first()
         )
 
+    def get_contributions_by_user(
+        self,
+        db: Session,
+        user_id: int,
+        status: Optional[ContributionStatus] = None
+    ) -> list[Contribution]:
+        query = db.query(Contribution).filter(Contribution.user_id == user_id)
+        if status:
+            query = query.filter(Contribution.status == status)
+        return query.order_by(Contribution.created_at.desc()).all()
+
+    def get_contributions_by_campaign(
+        self,
+        db: Session,
+        campaign_id: int,
+        status: Optional[ContributionStatus] = None
+    ) -> list[Contribution]:
+        query = db.query(Contribution).filter(Contribution.campaign_id == campaign_id)
+        if status:
+            query = query.filter(Contribution.status == status)
+        return query.order_by(Contribution.created_at.desc()).all()
+
     def reconcile_failed_payment(
         self,
         db: Session,
