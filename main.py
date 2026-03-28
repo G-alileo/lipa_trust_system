@@ -2,6 +2,10 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from api.routes import auth, campaigns, contributions
+from api.routes.admin import campaigns as admin_campaigns
+from api.routes.admin import refunds as admin_refunds
+from api.routes.admin import surplus as admin_surplus
+from api.routes.admin import monitoring as admin_monitoring
 
 app = FastAPI(
     title="Lipa Trust System",
@@ -25,6 +29,10 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(campaigns.router, prefix="/api/v1")
 app.include_router(contributions.router, prefix="/api/v1")
+app.include_router(admin_campaigns.router, prefix="/api/v1")
+app.include_router(admin_refunds.router, prefix="/api/v1")
+app.include_router(admin_surplus.router, prefix="/api/v1")
+app.include_router(admin_monitoring.router, prefix="/api/v1")
 
 
 @app.get("/health")
