@@ -1,0 +1,885 @@
+{
+	"info": {
+		"_postman_id": "lipa-trust-system-api",
+		"name": "Lipa Trust System API",
+		"description": "Comprehensive API collection for the Lipa Trust System - A crowdfunding platform with M-Pesa integration and role-based authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refresh_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "campaign_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "contribution_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refund_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register Regular User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data.id) {",
+									"        console.log('User registered successfully with ID:', response.data.id);",
+									"        console.log('User role - Admin:', response.data.is_admin);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\": \"254712345678\",\n    \"password\": \"SecurePass123!\",\n    \"email\": \"user@example.com\",\n    \"role\": \"user\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Admin User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data.id) {",
+									"        console.log('Admin user registered successfully with ID:', response.data.id);",
+									"        console.log('User role - Admin:', response.data.is_admin);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\": \"254798765432\",\n    \"password\": \"AdminPass456!\",\n    \"email\": \"admin@example.com\",\n    \"role\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data.access_token) {",
+									"        pm.collectionVariables.set('access_token', response.data.access_token);",
+									"        console.log('Access token saved:', response.data.access_token);",
+									"        ",
+									"        if (response.data.refresh_token) {",
+									"            pm.collectionVariables.set('refresh_token', response.data.refresh_token);",
+									"            console.log('Refresh token saved');",
+									"        }",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\": \"254712345678\",\n    \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "auth", "login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Admin User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data.access_token) {",
+									"        pm.collectionVariables.set('access_token', response.data.access_token);",
+									"        console.log('Admin access token saved:', response.data.access_token);",
+									"        ",
+									"        if (response.data.refresh_token) {",
+									"            pm.collectionVariables.set('refresh_token', response.data.refresh_token);",
+									"            console.log('Admin refresh token saved');",
+									"        }",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\": \"254798765432\",\n    \"password\": \"AdminPass456!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "auth", "login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data.access_token) {",
+									"        pm.collectionVariables.set('access_token', response.data.access_token);",
+									"        console.log('Access token refreshed and saved:', response.data.access_token);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/refresh",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "auth", "refresh"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Campaign Management",
+			"item": [
+				{
+					"name": "Create Campaign",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data.id) {",
+									"        pm.collectionVariables.set('campaign_id', response.data.id);",
+									"        console.log('Campaign ID saved:', response.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Help Build Water Well for Kibera Community\",\n    \"description\": \"We are raising funds to build a clean water well for the Kibera community. This will provide access to clean drinking water for over 500 families.\",\n    \"target_amount\": 500000,\n    \"deadline\": \"2024-12-31T23:59:59\",\n    \"paybill_number\": \"174379\",\n    \"account_reference\": \"WATER2024\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/campaigns/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "campaigns", ""]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List All Campaigns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/campaigns/?skip=0&limit=20",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "campaigns", ""],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Campaigns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/campaigns/my?skip=0&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "campaigns", "my"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Campaign Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/campaigns/{{campaign_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "campaigns", "{{campaign_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Campaign Public",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"notes\": \"Campaign verified after document review\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/campaigns/{{campaign_id}}/verify",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "campaigns", "{{campaign_id}}", "verify"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contribution Management",
+			"item": [
+				{
+					"name": "Initiate M-Pesa Contribution",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data.contribution_id) {",
+									"        pm.collectionVariables.set('contribution_id', response.data.contribution_id);",
+									"        console.log('Contribution ID saved:', response.data.contribution_id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"campaign_id\": \"{{campaign_id}}\",\n    \"amount\": 1000,\n    \"phone_number\": \"254712345678\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/contributions/initiate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "contributions", "initiate"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "M-Pesa Callback (Webhook)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Body\": {\n        \"stkCallback\": {\n            \"MerchantRequestID\": \"29115-34620561-1\",\n            \"CheckoutRequestID\": \"ws_CO_191220191020363925\",\n            \"ResultCode\": 0,\n            \"ResultDesc\": \"The service request is processed successfully.\",\n            \"CallbackMetadata\": {\n                \"Item\": [\n                    {\n                        \"Name\": \"Amount\",\n                        \"Value\": 1000.00\n                    },\n                    {\n                        \"Name\": \"MpesaReceiptNumber\",\n                        \"Value\": \"NLJ7RT61SV\"\n                    },\n                    {\n                        \"Name\": \"TransactionDate\",\n                        \"Value\": 20191219102115\n                    },\n                    {\n                        \"Name\": \"PhoneNumber\",\n                        \"Value\": 254712345678\n                    }\n                ]\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/contributions/callback/mpesa",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "contributions", "callback", "mpesa"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Contributions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/contributions/my?skip=0&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "contributions", "my"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contribution Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/contributions/{{contribution_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "contributions", "{{contribution_id}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin - Campaign Verification",
+			"item": [
+				{
+					"name": "Get Pending Campaigns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/campaigns/pending?skip=0&limit=20",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "campaigns", "pending"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Campaign (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"verification_notes\": \"Campaign documents verified successfully. All requirements met.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/campaigns/{{campaign_id}}/verify",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "campaigns", "{{campaign_id}}", "verify"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reject Campaign (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reason\": \"Insufficient documentation provided. Please submit valid identification and project proposal.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/campaigns/{{campaign_id}}/reject",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "campaigns", "{{campaign_id}}", "reject"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin - Refund Management",
+			"item": [
+				{
+					"name": "Get Pending Refunds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/refunds/pending?skip=0&limit=20",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "refunds", "pending"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve Refund",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/refunds/{{refund_id}}/approve",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "refunds", "{{refund_id}}", "approve"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reject Refund",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reason\": \"Campaign is still active and within deadline. Refund not applicable at this time.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/refunds/{{refund_id}}/reject",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "refunds", "{{refund_id}}", "reject"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Campaign Refund",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/refunds/campaigns/{{campaign_id}}/refund",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "refunds", "campaigns", "{{campaign_id}}", "refund"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin - Surplus Management",
+			"item": [
+				{
+					"name": "Get Campaigns with Surplus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/surplus/campaigns?skip=0&limit=20",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "surplus", "campaigns"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Process Surplus Refund",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 25000.00\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/surplus/campaigns/{{campaign_id}}/refund",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "surplus", "campaigns", "{{campaign_id}}", "refund"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hold Surplus Funds",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/surplus/campaigns/{{campaign_id}}/hold",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "surplus", "campaigns", "{{campaign_id}}", "hold"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin - System Monitoring",
+			"item": [
+				{
+					"name": "Get Failed Transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/monitoring/failures?skip=0&limit=20&failure_type=payment_failed",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "monitoring", "failures"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "failure_type",
+									"value": "payment_failed"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get System Statistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/monitoring/stats",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "monitoring", "stats"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Failure Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/monitoring/failures/types",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "monitoring", "failures", "types"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recent Admin Actions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/monitoring/actions?skip=0&limit=50",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "monitoring", "actions"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Auto-set content type for POST requests",
+					"if (pm.request.method === 'POST' && pm.request.body && pm.request.body.mode === 'raw') {",
+					"    pm.request.headers.add({",
+					"        key: 'Content-Type',",
+					"        value: 'application/json'",
+					"    });",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Global test to log response status and basic info",
+					"console.log(`${pm.request.method} ${pm.request.url.toString()} - Status: ${pm.response.code}`);",
+					"",
+					"// Check for standard API response format",
+					"if (pm.response.headers.get('Content-Type')?.includes('application/json')) {",
+					"    try {",
+					"        const response = pm.response.json();",
+					"        if (response.hasOwnProperty('success')) {",
+					"            pm.test('Response has standard format', () => {",
+					"                pm.expect(response).to.have.property('success');",
+					"                pm.expect(response).to.have.property('data');",
+					"                pm.expect(response).to.have.property('error');",
+					"            });",
+					"            ",
+					"            if (!response.success && response.error) {",
+					"                console.warn('API Error:', response.error);",
+					"            }",
+					"        }",
+					"    } catch (e) {",
+					"        console.warn('Response is not valid JSON');",
+					"    }",
+					"}"
+				]
+			}
+		}
+	]
+}

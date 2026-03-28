@@ -24,7 +24,7 @@ router = APIRouter(prefix="/admin/campaigns", tags=["Admin - Campaigns"])
 verification_service = VerificationService()
 
 
-@router.get("/pending", response_model=APIResponse[List[CampaignPendingResponse]])
+@router.get("/pending", response_model=APIResponse)
 def list_pending_campaigns(
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),

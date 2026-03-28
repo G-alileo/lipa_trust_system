@@ -43,17 +43,48 @@ def list_pending_refunds(
         campaign = data.get("campaign")
         contribution = data.get("contribution")
 
-        item = RefundPendingResponse(
-            id=refund.id,
-            contribution_id=refund.contribution_id,
-            amount=refund.amount,
-            status=refund.status,
-            attempts=refund.attempts,
-            created_at=refund.created_at,
-            user=RefundUserInfo.model_validate(user) if user else None,
-            campaign=RefundCampaignInfo.model_validate(campaign) if campaign else None,
-            contribution=RefundContributionInfo.model_validate(contribution) if contribution else None
-        )
+        try:
+            user_info = RefundUserInfo.model_validate(user) if user else None
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"User validation error: {str(e)}"
+            )
+
+        try:
+            campaign_info = RefundCampaignInfo.model_validate(campaign) if campaign else None
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Campaign validation error: {str(e)}"
+            )
+
+        try:
+            contribution_info = RefundContributionInfo.model_validate(contribution) if contribution else None
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Contribution validation error: {str(e)}"
+            )
+
+        try:
+            item = RefundPendingResponse(
+                id=refund.id,
+                contribution_id=refund.contribution_id,
+                amount=refund.amount,
+                status=refund.status,
+                attempts=refund.attempts,
+                created_at=refund.created_at,
+                user=user_info,
+                campaign=campaign_info,
+                contribution=contribution_info
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"RefundPendingResponse validation error: {str(e)}"
+            )
+
         items.append(item)
 
     return APIResponse.ok({
