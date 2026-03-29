@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 
 const AuthContext = createContext();
 
-const API_BASE = "http://localhost:8000/api/v1";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
 const OFFLINE_QUEUE_KEY = "lipa_offline_queue";
 
 export function AuthProvider({ children }) {
