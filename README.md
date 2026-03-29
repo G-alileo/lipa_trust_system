@@ -2,7 +2,7 @@
 
 > **"Money in Motion" 
 
-[![LipaTrust Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://lipatrust.example.com) 
+[![LipaTrust Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://lipatrustapp.netlify.app/) 
 [![Repository](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/G-alileo/lipa_trust_system)
 
 ## Problem Statement
