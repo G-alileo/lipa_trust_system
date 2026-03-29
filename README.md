@@ -1,146 +1,89 @@
-# LipaTrust Monorepo
+# LipaTrust: Programmable Trust for the Digital Economy
 
-LipaTrust is a crowdfunding product with:
-- Public campaign discovery and share links
-- Account signup/login
-- Contribution via M-Pesa STK Push
-- Admin verification, refunds, disbursement, and monitoring APIs
+> **"Money in Motion" 
 
-## Repository Layout
+[![LipaTrust Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://lipatrust.example.com) 
+[![Repository](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/G-alileo/lipa_trust_system)
 
-```text
-lipa_trust_system/
-├── backend/   # FastAPI + SQLAlchemy + Daraja integration
-└── ui/        # React + Vite frontend (landing, login, signup)
-```
+## Problem Statement
+In many crowdfunding and peer-to-peer payment scenarios in Kenya, there is a significant "trust gap." Donors and contributors often worry about whether their funds are reaching the intended recipient or if the campaign is legitimate. Existing platforms often lack automated verification and transparency for small-to-medium scale fundraisers.
 
-## Requirements
+## The Solution: LipaTrust
+LipaTrust is a **Programmable Trust** platform that bridges this gap using M-Pesa's robust infrastructure. We provide a guided product flow where:
+- **Campaigns are Verified**: Admins audit and verify Paybill/Till numbers before campaigns go live.
+- **Automated Disbursement**: Funds are settled directly to verified business numbers.
+- **Transparent Tracking**: Real-time progress bars and ledger entries for every contribution.
+- **Integrity First**: If a campaign is rejected after contributions begin, refunds are automatically queued.
 
+---
+
+## Key Features
+- **Public Campaign Discovery**: Search and support verified causes.
+- **M-Pesa STK Push Integration**: One-click contributions directly from your mobile phone.
+- **Unified Auth Flow**: Seamless transition between supporting and creating campaigns.
+- **Admin Audit Dashboard**: Robust tools for platform integrity and campaign verification.
+- **Offline Resilience**: Payment requests are queued locally if the connection is lost and synced when back online.
+
+---
+
+## Tools & Technologies
+- **Frontend**: React (Vite), Vanilla CSS (Custom Design System), React Router.
+- **Backend**: FastAPI (Python), SQLAlchemy ORM, Uvicorn.
+- **Database**: MySQL 8.0.
+- **Integrations**: Safaricom Daraja API (M-Pesa), JWT Authentication.
+- **DevOps**: `uv` for Python package management, `npm` for frontend.
+
+---
+
+## Meet the Team
+| Name | Role | GitHub |
+| :--- | :--- | :--- |
+| **Jamespeter Murithi** | Lead Architect / Backend | [@G-alileo](https://github.com/G-alileo) |
+| **Meshack Bahati** | Backend Engineer | [@meshackbahati](https://github.com/meshackbahati) |
+| **Mark Waweru** | UI/UX Designer | [@Allghosted](https://github.com/Allghosted) |
+| **Anne Irene Wanjiru** | Frontend Developer | [@ViraSheik](https://github.com/ViraSheik) |
+| **Francis Mwangi** | QA & Integration | [@254francis](https://github.com/254francis) |
+
+---
+
+## About the System
+LipaTrust is designed to be "human-first." We've removed technical complexity so that users can focus on their goals—whether that's raising money for a medical bill, a school project, or a community initiative. The system architecture emphasizes **idempotency** (to prevent double-payments) and **row-level locking** (to ensure financial consistency).
+
+### Technical Flow
+1. **Discovery**: Users discover campaigns on the landing page.
+2. **Commitment**: Contributor initiates STK Push via M-Pesa.
+3. **Verification**: Daraja API sends a callback to our backend; we update the campaign ledger.
+4. **Disbursement**: Admin verifies the goal achievement and triggers fund release to the campaign's Paybill.
+
+---
+
+## Setup & Local Development
+
+### Prerequisites
 - Python 3.11+
 - Node.js 18+
-- npm 9+
-- MySQL 8+ (or compatible MySQL endpoint)
-- `uv` for Python dependency management
-- Public HTTPS callback URLs for Daraja sandbox testing (for example with ngrok or a deployed domain)
+- MySQL 8+
 
-## Product Flow
-
-1. User lands on `/` and discovers campaigns.
-2. Shared campaign links open directly via `/?campaign=<id>`.
-3. User signs up or logs in.
-4. User contributes to a campaign via STK Push.
-5. Backend receives callback and updates status/ledger.
-6. Admin endpoints handle verification, refunds, and operational monitoring.
-
-## Architecture
-
-```mermaid
-flowchart TB
-    subgraph Client
-        Browser[Web Browser]
-    end
-
-    subgraph UI[ui/ React App]
-        Landing[Landing Page]
-        Login[Login Page]
-        Signup[Signup Page]
-    end
-
-    subgraph API[backend/ FastAPI]
-        Auth[Auth Routes]
-        PubCampaign[Public Campaign Routes]
-        Campaign[Campaign Routes]
-        Contribution[Contribution Routes]
-        Admin[Admin Routes]
-        Payment[Daraja Client]
-        Workers[Retry & Disbursement Workers]
-    end
-
-    subgraph DB[MySQL]
-        Users[(users)]
-        Campaigns[(campaigns)]
-        Contributions[(contributions)]
-        Refunds[(refunds)]
-        Disbursements[(disbursements)]
-        Ledger[(ledger_entries)]
-        Failures[(failed_transactions)]
-    end
-
-    subgraph Daraja[M-Pesa Daraja Sandbox]
-        OAuth[OAuth]
-        STK[STK Push]
-        B2C[B2C]
-        B2B[B2B]
-        TxStatus[Tx Status]
-        Callback[Callback Endpoints]
-    end
-
-    Browser --> UI
-    UI --> Auth
-    UI --> PubCampaign
-    UI --> Campaign
-    UI --> Contribution
-    UI --> Admin
-
-    Contribution --> Payment
-    Admin --> Payment
-    Workers --> Payment
-
-    Payment --> OAuth
-    Payment --> STK
-    Payment --> B2C
-    Payment --> B2B
-    Payment --> TxStatus
-    Callback --> API
-
-    Auth --> Users
-    Campaign --> Campaigns
-    Contribution --> Contributions
-    Admin --> Refunds
-    Admin --> Disbursements
-    API --> Ledger
-    Workers --> Failures
-```
-
-## Concurrency and Consistency
-
-- Row-level locks (`with_for_update`) protect critical money-state transitions.
-- Callback processing is idempotent (receipt + checkout reference handling).
-- Status-based processing (`PENDING/PROCESSING/COMPLETED/FAILED`) reduces race conditions.
-- Retry/reconciliation workers handle stale transaction states.
-- Failed transaction records support audit and replay workflows.
-
-## Local Development
-
-### 1) Backend
-
+### 1. Backend Setup
 ```bash
 cd backend
 cp .env.example .env
+# Fill in your M-Pesa Sandbox credentials in .env
 uv venv
-source .venv/bin/activate
+source .venv/bin/activate # or .venv\Scripts\activate on Windows
 uv sync
 uv run python create_tables.py
-uvicorn main:app --reload --port 8000
+uvicorn main:app --reload
 ```
 
-### 2) Frontend
-
+### 2. Frontend Setup
 ```bash
 cd ui
 npm install
 npm run dev
 ```
 
-Open frontend URL shown by Vite (usually `http://localhost:5173`).
 
-## Production Deployment
 
-See:
-- [Backend Deployment](/home/bealthguy/Public/lipa_trust_system/backend/README.md)
-- [UI Deployment](/home/bealthguy/Public/lipa_trust_system/ui/README.md)
-
-## Notes
-
-- Keep `MPESA_MODE=mock` for offline dev without Daraja.
-- Set `MPESA_MODE=sandbox` for integration testing with real sandbox credentials.
+---
+*Developed for the Safaricom x GOMYCODE Kenya #MoneyInMotion Hackathon 2026.*
