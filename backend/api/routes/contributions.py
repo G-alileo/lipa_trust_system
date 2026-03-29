@@ -1,4 +1,5 @@
 from typing import List
+import logging
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -16,6 +17,7 @@ from schemas.contribution import ContributionCreate, ContributionResponse, Mpesa
 from schemas.base import APIResponse
 
 router = APIRouter(prefix="/contributions", tags=["Contributions"])
+logger = logging.getLogger(__name__)
 
 contribution_service = ContributionService()
 
@@ -59,9 +61,9 @@ def mpesa_callback(
             payload=payload.model_dump()
         )
     except DuplicateReceiptError:
-        pass
+        logger.info("Duplicate M-Pesa callback receipt received; ignoring as idempotent")
     except Exception:
-        pass
+        logger.exception("Failed processing M-Pesa callback payload")
 
     return {"ResultCode": 0, "ResultDesc": "Accepted"}
 

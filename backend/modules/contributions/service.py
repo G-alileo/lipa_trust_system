@@ -9,7 +9,7 @@ from modules.contributions.models import Contribution
 from modules.system.models import FailedTransaction
 from modules.campaigns.service import CampaignService, CampaignError
 from modules.ledger.service import LedgerService
-from modules.payments.mpesa_client import PaymentService, STKPushResponse
+from modules.payments.mpesa_client import PaymentService, STKPushResponse, PaymentError
 
 
 class ContributionError(Exception):
@@ -48,13 +48,16 @@ class ContributionService:
         if not self.campaign_service.can_accept_contribution(campaign, amount):
             raise ContributionError("Campaign cannot accept contributions")
 
-        stk_response: STKPushResponse = self.payment_service.initiate_stk_push(
-            phone_number=phone_number,
-            amount=amount,
-            account_reference=campaign.account_reference,
-            transaction_desc=f"Contribution to {campaign.title}",
-            paybill_number=campaign.paybill_number
-        )
+        try:
+            stk_response: STKPushResponse = self.payment_service.initiate_stk_push(
+                phone_number=phone_number,
+                amount=amount,
+                account_reference=campaign.account_reference,
+                transaction_desc=f"Contribution to {campaign.title}",
+                paybill_number=campaign.paybill_number
+            )
+        except PaymentError as e:
+            raise ContributionError(str(e)) from e
 
         contribution = Contribution(
             campaign_id=campaign_id,

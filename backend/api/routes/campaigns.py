@@ -15,6 +15,33 @@ from schemas.base import APIResponse
 router = APIRouter(prefix="/campaigns", tags=["Campaigns"])
 
 
+@router.get("/public", response_model=APIResponse[List[CampaignResponse]])
+def list_public_campaigns(db: Session = Depends(get_db)):
+    campaigns = db.query(Campaign).filter(
+        Campaign.status.in_([CampaignStatus.ACTIVE, CampaignStatus.COMPLETED])
+    ).all()
+    return APIResponse.ok([CampaignResponse.model_validate(c) for c in campaigns])
+
+
+@router.get("/public/{campaign_id}", response_model=APIResponse[CampaignResponse])
+def get_public_campaign(campaign_id: int, db: Session = Depends(get_db)):
+    try:
+        campaign = CampaignService.get_campaign(db, campaign_id)
+    except CampaignNotFoundError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Campaign not found"
+        )
+
+    if campaign.status not in (CampaignStatus.ACTIVE, CampaignStatus.COMPLETED):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Campaign not found"
+        )
+
+    return APIResponse.ok(CampaignResponse.model_validate(campaign))
+
+
 @router.post("/", response_model=APIResponse[CampaignResponse])
 def create_campaign(
     payload: CampaignCreate,

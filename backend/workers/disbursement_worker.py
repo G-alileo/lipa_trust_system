@@ -1,13 +1,9 @@
-from decimal import Decimal
-from typing import Optional
-
 from sqlalchemy.orm import Session
 
 from core.db import SessionLocal
 from domain.enums import CampaignStatus, TransactionStatus
 from modules.campaigns.models import Campaign
 from modules.disbursements.models import Disbursement
-from modules.users.models import User
 from modules.ledger.service import LedgerService
 from modules.payments.mpesa_client import PaymentService, B2CError
 from modules.system.models import FailedTransaction
@@ -16,7 +12,7 @@ from modules.system.models import FailedTransaction
 class DisbursementWorker:
 
     ACCOUNT_CAMPAIGN_FUNDS = "CAMPAIGN_FUNDS"
-    ACCOUNT_OWNER_WALLET = "OWNER_WALLET"
+    ACCOUNT_OWNER_WALLET = "BUSINESS_PAYBILL"
 
     def __init__(self):
         self.ledger_service = LedgerService()
@@ -70,8 +66,6 @@ class DisbursementWorker:
             .first()
         )
 
-        owner = db.query(User).filter(User.id == campaign.owner_id).first()
-
         disbursement = Disbursement(
             campaign_id=campaign.id,
             amount=campaign.current_amount,
@@ -81,8 +75,8 @@ class DisbursementWorker:
         db.flush()
 
         try:
-            response = self.payment_service.initiate_b2c_refund(
-                phone_number=owner.phone_number,
+            response = self.payment_service.initiate_b2b_disbursement(
+                receiver_shortcode=campaign.paybill_number,
                 amount=campaign.current_amount,
                 remarks=f"Disbursement for campaign {campaign.id}"
             )
@@ -112,7 +106,7 @@ class DisbursementWorker:
             disbursement.status = TransactionStatus.FAILED
             self._record_failure(
                 db,
-                reference_type="DISBURSEMENT_B2C",
+                reference_type="DISBURSEMENT_B2B",
                 reference_id=str(disbursement.id),
                 reason=str(e)
             )

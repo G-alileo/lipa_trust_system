@@ -1,63 +1,146 @@
-# Lipa Trust System
+# LipaTrust Monorepo
 
-A crowdfunding platform with M-Pesa integration, built with FastAPI and SQLAlchemy.
+LipaTrust is a crowdfunding product with:
+- Public campaign discovery and share links
+- Account signup/login
+- Contribution via M-Pesa STK Push
+- Admin verification, refunds, disbursement, and monitoring APIs
 
-## Setup
+## Repository Layout
 
-1. **Install dependencies**
-   ```bash
-   uv venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   uv sync
-   ```
-
-2. **Configure environment**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your database URL and M-Pesa credentials
-   ```
-
-3. **Initialize database**
-   ```bash
-   uv run python create_tables.py
-   ```
-
-4. **Run server**
-   ```bash
-   uvicorn main:app --reload --port 8000
-   ```
-
-API documentation available at `http://localhost:8000/docs`
-
-## Project Structure
-
-```
+```text
 lipa_trust_system/
-├── api/                    # FastAPI routes and dependencies
-│   ├── routes/            # API endpoints
-│   └── deps.py           # Authentication dependencies
-├── core/                  # Configuration and database setup
-├── modules/               # Business logic modules
-│   ├── admin/            # Admin services
-│   ├── campaigns/        # Campaign operations
-│   ├── contributions/    # M-Pesa payment processing
-│   ├── disbursements/    # Payment disbursements
-│   ├── ledger/           # Accounting system
-│   ├── payments/         # Payment processing
-│   ├── refunds/          # Refund handling
-│   ├── system/           # System utilities
-│   ├── users/            # User management
-│   └── vouches/          # Trust/vouch system
-├── schemas/               # Pydantic request/response models
-├── domain/                # Enums and domain objects
-├── workers/               # Background tasks
-└── tests/                 # Unit tests
+├── backend/   # FastAPI + SQLAlchemy + Daraja integration
+└── ui/        # React + Vite frontend (landing, login, signup)
 ```
 
-## Authentication
+## Requirements
 
-The system supports role-based authentication with JWT tokens. Users can register as either `user` or `admin` role. Admin users have access to campaign verification, refund management, and system monitoring endpoints.
+- Python 3.11+
+- Node.js 18+
+- npm 9+
+- MySQL 8+ (or compatible MySQL endpoint)
+- `uv` for Python dependency management
+- Public HTTPS callback URLs for Daraja sandbox testing (for example with ngrok or a deployed domain)
 
-## Testing
+## Product Flow
 
-Import `postman_collection.json` into Postman for comprehensive API testing with automated token management.
+1. User lands on `/` and discovers campaigns.
+2. Shared campaign links open directly via `/?campaign=<id>`.
+3. User signs up or logs in.
+4. User contributes to a campaign via STK Push.
+5. Backend receives callback and updates status/ledger.
+6. Admin endpoints handle verification, refunds, and operational monitoring.
+
+## Architecture
+
+```mermaid
+flowchart TB
+    subgraph Client
+        Browser[Web Browser]
+    end
+
+    subgraph UI[ui/ React App]
+        Landing[Landing Page]
+        Login[Login Page]
+        Signup[Signup Page]
+    end
+
+    subgraph API[backend/ FastAPI]
+        Auth[Auth Routes]
+        PubCampaign[Public Campaign Routes]
+        Campaign[Campaign Routes]
+        Contribution[Contribution Routes]
+        Admin[Admin Routes]
+        Payment[Daraja Client]
+        Workers[Retry & Disbursement Workers]
+    end
+
+    subgraph DB[MySQL]
+        Users[(users)]
+        Campaigns[(campaigns)]
+        Contributions[(contributions)]
+        Refunds[(refunds)]
+        Disbursements[(disbursements)]
+        Ledger[(ledger_entries)]
+        Failures[(failed_transactions)]
+    end
+
+    subgraph Daraja[M-Pesa Daraja Sandbox]
+        OAuth[OAuth]
+        STK[STK Push]
+        B2C[B2C]
+        B2B[B2B]
+        TxStatus[Tx Status]
+        Callback[Callback Endpoints]
+    end
+
+    Browser --> UI
+    UI --> Auth
+    UI --> PubCampaign
+    UI --> Campaign
+    UI --> Contribution
+    UI --> Admin
+
+    Contribution --> Payment
+    Admin --> Payment
+    Workers --> Payment
+
+    Payment --> OAuth
+    Payment --> STK
+    Payment --> B2C
+    Payment --> B2B
+    Payment --> TxStatus
+    Callback --> API
+
+    Auth --> Users
+    Campaign --> Campaigns
+    Contribution --> Contributions
+    Admin --> Refunds
+    Admin --> Disbursements
+    API --> Ledger
+    Workers --> Failures
+```
+
+## Concurrency and Consistency
+
+- Row-level locks (`with_for_update`) protect critical money-state transitions.
+- Callback processing is idempotent (receipt + checkout reference handling).
+- Status-based processing (`PENDING/PROCESSING/COMPLETED/FAILED`) reduces race conditions.
+- Retry/reconciliation workers handle stale transaction states.
+- Failed transaction records support audit and replay workflows.
+
+## Local Development
+
+### 1) Backend
+
+```bash
+cd backend
+cp .env.example .env
+uv venv
+source .venv/bin/activate
+uv sync
+uv run python create_tables.py
+uvicorn main:app --reload --port 8000
+```
+
+### 2) Frontend
+
+```bash
+cd ui
+npm install
+npm run dev
+```
+
+Open frontend URL shown by Vite (usually `http://localhost:5173`).
+
+## Production Deployment
+
+See:
+- [Backend Deployment](/home/bealthguy/Public/lipa_trust_system/backend/README.md)
+- [UI Deployment](/home/bealthguy/Public/lipa_trust_system/ui/README.md)
+
+## Notes
+
+- Keep `MPESA_MODE=mock` for offline dev without Daraja.
+- Set `MPESA_MODE=sandbox` for integration testing with real sandbox credentials.
