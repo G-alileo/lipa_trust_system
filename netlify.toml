@@ -1,0 +1,16 @@
+# Netlify configuration for LipaTrust frontend deployment
+
+[build]
+  base = "ui"
+  command = "npm install && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# SPA redirect for React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
