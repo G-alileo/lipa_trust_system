@@ -113,13 +113,7 @@ export function AdminOverviewView() {
                 />
                 Platform Statistics
               </h3>
-              <div
-                className="stats-grid"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                  gap: "1.25rem",
-                }}
+              <div className="stats-grid"
               >
                 <StatsCard
                   label="Total Campaigns"
@@ -152,12 +146,7 @@ export function AdminOverviewView() {
             </section>
 
             <section style={{ marginBottom: "2.5rem" }}>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                  gap: "1.25rem",
-                }}
+              <div className="admin-cards-grid"
               >
                 <Card>
                   <h4

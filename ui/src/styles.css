@@ -939,6 +939,25 @@ h1, h2, h3, h4 {
   margin-top: 0.5rem;
 }
 
+.admin-cards-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+@media (max-width: 768px) {
+  .admin-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .admin-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .status-toast {
   position: fixed;
   top: 5rem;
@@ -1038,6 +1057,20 @@ select.input {
 
   .admin-view {
     padding: 1rem;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .dashboard-view {
+    padding: 1rem;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
   }
 
   .status-toast {
@@ -1060,6 +1093,121 @@ select.input {
   .grid-cols-3,
   .grid-cols-4 {
     grid-template-columns: 1fr;
+  }
+
+  .admin-header {
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+
+  .admin-header h2 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .admin-header p {
+    font-size: 0.875rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  header h2 {
+    font-size: 1.5rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  h3 {
+    font-size: 1.125rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  h4 {
+    font-size: 1rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .container, .layout {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .table-responsive {
+    margin: 0 -1.25rem;
+    padding: 0 1.25rem;
+  }
+
+  .table-responsive table {
+    font-size: 0.875rem;
+  }
+
+  .table-responsive th,
+  .table-responsive td {
+    padding: 0.75rem 0.5rem !important;
+    white-space: nowrap;
+  }
+
+  .admin-view table td:last-child {
+    min-width: 200px;
+  }
+
+  .admin-view table input {
+    min-width: 120px;
+    font-size: 0.875rem;
+  }
+
+  .admin-view table button {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .stats-grid {
+    gap: 0.875rem;
+  }
+
+  .admin-view > section > div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .modal-content {
+    max-height: 85vh;
+    margin: 1rem;
+  }
+
+  .campaign-grid {
+    gap: 1rem;
+  }
+
+  .section-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+
+  .icon-container {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .icon-container.lg {
+    width: 2.5rem;
+    height: 2.5rem;
   }
 }
 
@@ -1123,6 +1271,33 @@ select.input {
   .nav.mobile-open .btn {
     width: 100%;
     justify-content: center;
+  }
+
+  nav, .admin-nav {
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+  }
+
+  .admin-view *, .dashboard-view * {
+    max-width: 100% !important;
+  }
+
+  /* Global table scrolling safety net */
+  table {
+    width: 100% !important;
+    table-layout: auto;
+  }
+
+  /* Ensure all table containers can scroll */
+  .admin-view table,
+  .dashboard-view table {
+    min-width: 700px;
+  }
+
+  /* Make sure table cells don't break layout */
+  td, th {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }
 
@@ -1190,26 +1365,88 @@ select.input {
   gap: 2rem;
 }
 
+.dashboard-view {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.dashboard-view header {
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-view {
+    padding: 1rem;
+  }
+
+  .dashboard-view header {
+    margin-bottom: 1.5rem;
+  }
+
+  .dashboard-grid {
+    gap: 1.5rem;
+  }
+}
+
 .stats-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
 @media (max-width: 640px) {
   .stats-grid {
     grid-template-columns: 1fr;
+    gap: 0.875rem;
   }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 }
 
 @media (min-width: 1025px) {
   .stats-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stats-card {
+  width: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .stats-card {
+    padding: 1rem !important;
+    min-height: 120px;
+  }
+
+  .stats-card .eyebrow {
+    font-size: 0.625rem !important;
+    margin-bottom: 0.25rem !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .stats-card > div > div:first-child > div:nth-child(2) {
+    font-size: 1.5rem !important;
+    margin-top: 0.25rem !important;
+  }
+
+  .stats-card-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .eyebrow {
+    font-size: 0.625rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
   }
 }
 
@@ -1272,8 +1509,61 @@ select.input {
 }
 
 @media (max-width: 768px) {
+  .table-responsive {
+    scrollbar-width: thin;
+    border-radius: 0.5rem;
+  }
+
   .table-responsive table {
-    min-width: 600px;
+    min-width: 700px !important;
+    width: max-content;
+  }
+
+  .table-responsive th,
+  .table-responsive td {
+    white-space: nowrap !important;
+    min-width: 120px;
+  }
+
+  .table-responsive td:last-child {
+    min-width: 200px !important;
+  }
+
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .overflow-x-auto table {
+    min-width: 800px !important;
+    width: max-content;
+    display: table;
+  }
+
+  .overflow-x-auto th,
+  .overflow-x-auto td {
+    font-size: 0.875rem !important;
+    padding: 0.75rem 0.5rem !important;
+    white-space: nowrap !important;
+    min-width: 120px;
+  }
+
+  /* Ensure DataTable action columns don't get too compressed */
+  .overflow-x-auto td:last-child {
+    min-width: 200px !important;
+  }
+
+  .overflow-x-auto + div > .flex {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch !important;
+  }
+
+  .overflow-x-auto + div > .flex > span {
+    text-align: center;
   }
 }
 
@@ -1457,12 +1747,18 @@ select.input {
   .admin-nav {
     gap: 0.375rem;
     padding-bottom: 0.75rem;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 1rem;
   }
 
   .admin-nav .btn {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.8125rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.75rem;
     white-space: nowrap;
+    min-width: auto;
+    flex-shrink: 0;
   }
 }
 

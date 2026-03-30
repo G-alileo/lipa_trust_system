@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Button, Card, Input } from "../components/base";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -17,6 +17,15 @@ export function AuthView({ initialMode = "login" }) {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const next = searchParams.get("next") || "/dashboard";
+
+    // Check for session expiration message
+    useEffect(() => {
+        const sessionExpired = sessionStorage.getItem("lipa_session_expired");
+        if (sessionExpired) {
+            setStatusMessage("Your session has expired. Please log in again.");
+            sessionStorage.removeItem("lipa_session_expired");
+        }
+    }, []);
 
     const toggleMode = () => setMode(prev => prev === "login" ? "signup" : "login");
 

@@ -12,6 +12,7 @@ export function StatsCard({ label, value, subtitle, trend, icon, onClick }) {
 
     return (
       <Card
+        className="stats-card"
         style={{
           padding: "1.25rem",
           cursor: onClick ? "pointer" : "default",
@@ -24,12 +25,13 @@ export function StatsCard({ label, value, subtitle, trend, icon, onClick }) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-start",
+            gap: "0.75rem",
           }}
         >
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: "1 1 auto", minWidth: 0 }}>
             <span
               className="eyebrow"
-              style={{ marginBottom: "0.375rem", fontSize: "0.6875rem" }}
+              style={{ marginBottom: "0.375rem", fontSize: "0.6875rem", display: "block" }}
             >
               {label}
             </span>
@@ -72,6 +74,7 @@ export function StatsCard({ label, value, subtitle, trend, icon, onClick }) {
           </div>
           {icon && (
             <div
+              className="stats-card-icon"
               style={{
                 width: "44px",
                 height: "44px",

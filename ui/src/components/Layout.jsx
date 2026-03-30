@@ -16,7 +16,7 @@ export function Topbar() {
   const {
     isAuthed,
     isAdmin,
-    persistTokens,
+    logout,
     isOffline,
     statusMessage,
     messageType,
@@ -49,9 +49,8 @@ export function Topbar() {
   const currentToastStyle = toastStyles[messageType] || toastStyles.info;
 
   const handleLogout = () => {
-    persistTokens("", "");
+    logout(false); // Manual logout, no expiration message
     setMobileMenuOpen(false);
-    navigate("/");
   };
 
   const closeMobileMenu = () => {
