@@ -7,7 +7,8 @@ export function AuthView({ initialMode = "login" }) {
     const [mode, setMode] = useState(initialMode);
     const [formData, setFormData] = useState({ phone_number: "", email: "", password: "" });
     const [loading, setLoading] = useState(false);
-    const { apiFetch, persistTokens, setStatusMessage } = useAuth();
+    const { apiFetch, persistTokens, setStatusMessage, initializeUser } =
+      useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const next = searchParams.get("next") || "/dashboard";
@@ -24,6 +25,7 @@ export function AuthView({ initialMode = "login" }) {
                     password: formData.password
                 }, false);
                 persistTokens(result.data.access_token, result.data.refresh_token);
+                await initializeUser(result.data.access_token);
                 setStatusMessage("Welcome back!");
                 navigate(next);
             } else {
