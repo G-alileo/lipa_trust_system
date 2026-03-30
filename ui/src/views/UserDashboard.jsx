@@ -94,7 +94,6 @@ export function UserDashboard() {
                         ) : myCampaigns.length === 0 ? (
                             <Card className="glass text-center p-12 md:col-span-2 lg:col-span-3">
                                 <div className="empty-state">
-                                    <div className="text-4xl mb-4">🚀</div>
                                     <h3 className="text-lg font-semibold mb-2">Ready to make an impact?</h3>
                                     <p className="mb-6">You haven't created any campaigns yet. Start your first campaign and begin making a difference!</p>
                                     <Button
@@ -139,7 +138,7 @@ export function UserDashboard() {
                                             </div>
                                             {isCompleted && (
                                                 <div className="text-xs text-success font-medium bg-success-50 px-2 py-1 rounded-md">
-                                                    🎉 Goal achieved!
+                                                    Goal achieved!
                                                 </div>
                                             )}
                                         </div>
@@ -177,7 +176,6 @@ export function UserDashboard() {
                     <Card className="p-0 overflow-hidden">
                         {myContributions.length === 0 ? (
                             <div className="empty-state p-12">
-                                <div className="text-4xl mb-4">❤️</div>
                                 <h3 className="text-lg font-semibold mb-2">Start supporting others</h3>
                                 <p className="mb-6">You haven't made any contributions yet. Explore active campaigns and make your first contribution!</p>
                                 <Button

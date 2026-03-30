@@ -70,12 +70,12 @@ export function DataTable({
 
     const getSortIcon = (columnKey) => {
         if (!sortable || sortConfig.key !== columnKey) {
-            return <span className="sort-icon sort-icon-inactive">⇅</span>;
+            return <span className="sort-icon sort-icon-inactive">SORT</span>;
         }
 
         return sortConfig.direction === 'asc'
-            ? <span className="sort-icon sort-icon-asc">↑</span>
-            : <span className="sort-icon sort-icon-desc">↓</span>;
+            ? <span className="sort-icon sort-icon-asc">UP</span>
+            : <span className="sort-icon sort-icon-desc">DOWN</span>;
     };
 
     const getFilterOptions = (columnKey) => {
@@ -206,7 +206,7 @@ export function DataTable({
                                     <div className="empty-state">
                                         {hasActiveFilters ? (
                                             <>
-                                                <div className="text-2xl mb-2">🔍</div>
+                                                <div className="text-2xl mb-2"></div>
                                                 <h3 className="text-lg font-semibold mb-2">No matching results</h3>
                                                 <p className="mb-4">Try adjusting your search or filter criteria</p>
                                                 <Button variant="ghost" size="sm" onClick={clearFilters}>
@@ -215,7 +215,7 @@ export function DataTable({
                                             </>
                                         ) : (
                                             <>
-                                                <div className="text-2xl mb-2">📋</div>
+                                                <div className="text-2xl mb-2"></div>
                                                 <p className="text-muted">{emptyMessage}</p>
                                             </>
                                         )}

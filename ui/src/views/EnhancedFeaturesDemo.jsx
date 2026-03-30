@@ -126,7 +126,7 @@ export function EnhancedFeaturesDemo() {
       sortable: true,
       render: (value) => (
         <div className="contribution-counter">
-          <span>❤️</span>
+          <span></span>
           <span>{value}</span>
         </div>
       )
@@ -150,19 +150,19 @@ export function EnhancedFeaturesDemo() {
     {
       title: "Campaign Creator",
       description: "Created your first campaign",
-      icon: "🚀",
+      icon: "",
       unlocked: true
     },
     {
       title: "Community Helper",
       description: "Made 5 contributions",
-      icon: "❤️",
+      icon: "",
       unlocked: true
     },
     {
       title: "Milestone Master",
       description: "Reach 50% funding on any campaign",
-      icon: "📈",
+      icon: "",
       unlocked: false,
       progress: 35,
       total: 50
@@ -170,7 +170,7 @@ export function EnhancedFeaturesDemo() {
     {
       title: "Super Supporter",
       description: "Contribute to 10 different campaigns",
-      icon: "⭐",
+      icon: "",
       unlocked: false,
       progress: 3,
       total: 10
@@ -182,7 +182,7 @@ export function EnhancedFeaturesDemo() {
       {/* Header */}
       <header className="text-center mb-12">
         <h1 className="text-4xl font-bold text-ink-900 mb-4">
-          ✨ Enhanced LipaTrust Features Demo
+           Enhanced LipaTrust Features Demo
         </h1>
         <p className="text-lg text-muted max-w-2xl mx-auto">
           Experience the transformed frontend with advanced DataTable, gamification,
@@ -326,7 +326,7 @@ export function EnhancedFeaturesDemo() {
               </div>
 
               <div className="milestone-badge">
-                <span>📈 Milestone: 75% Reached!</span>
+                <span> Milestone: 75% Reached!</span>
               </div>
             </div>
           </Card>
@@ -337,17 +337,17 @@ export function EnhancedFeaturesDemo() {
 
             <div className="space-y-3">
               <button className="share-button whatsapp w-full justify-center">
-                <span>📱</span>
+                <span>WhatsApp</span>
                 Share on WhatsApp
               </button>
 
               <button className="share-button twitter w-full justify-center">
-                <span>🐦</span>
+                <span>Twitter</span>
                 Share on Twitter
               </button>
 
               <button className="share-button facebook w-full justify-center">
-                <span>👥</span>
+                <span>Facebook</span>
                 Share on Facebook
               </button>
             </div>

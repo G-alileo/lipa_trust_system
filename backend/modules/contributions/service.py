@@ -53,8 +53,7 @@ class ContributionService:
                 phone_number=phone_number,
                 amount=amount,
                 account_reference=campaign.account_reference,
-                transaction_desc=f"Contribution to {campaign.title}",
-                paybill_number=campaign.paybill_number
+                transaction_desc=f"Contribution to {campaign.title}"
             )
         except PaymentError as e:
             raise ContributionError(str(e)) from e

@@ -67,7 +67,7 @@ export function CampaignDetailsView() {
     return (
         <div className="campaign-details">
             <div style={{ marginBottom: "2rem" }}>
-                <Button variant="ghost" onClick={() => navigate(-1)}>← Back</Button>
+                <Button variant="ghost" onClick={() => navigate(-1)}>&larr; Back</Button>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: "3rem" }}>

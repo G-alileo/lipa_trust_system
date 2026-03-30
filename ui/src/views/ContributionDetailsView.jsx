@@ -51,7 +51,7 @@ export function ContributionDetailsView() {
         <div className="contribution-details" style={{ maxWidth: "700px", margin: "0 auto" }}>
             <div style={{ marginBottom: "2rem" }}>
                 <Button variant="ghost" onClick={() => navigate(-1)}>
-                    ← Back to Dashboard
+                    &larr; Back to Dashboard
                 </Button>
             </div>
 

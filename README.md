@@ -17,6 +17,16 @@ LipaTrust is a **Programmable Trust** platform that bridges this gap using M-Pes
 
 ---
 
+## Trust & Transparency
+
+LipaTrust operates on a **Human-First Escrow Model** designed to eliminate fraud in digital fundraising:
+
+1.  **Centralized Collection**: All contributions are securely collected through the LipaTrust platform shortcode. This ensures all transactions are audited and mapped correctly before any funds move.
+2.  **Verified Disbursement**: Funds are only disbursed to campaign owners (via B2B M-Pesa) after our system verifies their identity and the legitimacy of the cause.
+3.  **Pro-Rata Refunds**: In the event a campaign is flagged as fraudulent or fails to meet critical milestones, the system is designed to facilitate pro-rata refunds back to the original contributors.
+
+---
+
 ## Key Features
 - **Public Campaign Discovery**: Search and support verified causes.
 - **M-Pesa STK Push Integration**: One-click contributions directly from your mobile phone.
@@ -40,7 +50,7 @@ LipaTrust is a **Programmable Trust** platform that bridges this gap using M-Pes
 | :--- | :--- | :--- |
 | **Jamespeter Murithi** | Lead Architect / Backend | [@G-alileo](https://github.com/G-alileo) |
 | **Meshack Bahati** | Backend Engineer | [@meshackbahati](https://github.com/meshackbahati) |
-| **Mark Waweru** | UI/UX Designer | [@Allghosted](https://github.com/Allghosted) |
+| **Mark Waweru** | UI/UX Designer | [@all-ghosted](https://github.com/Allghosted) |
 | **Anne Irene Wanjiru** | Frontend Developer | [@ViraSheik](https://github.com/ViraSheik) |
 | **Francis Mwangi** | QA & Integration | [@254francis](https://github.com/254francis) |
 
@@ -70,9 +80,16 @@ cd backend
 cp .env.example .env
 # Fill in your M-Pesa Sandbox credentials in .env
 uv venv
-source .venv/bin/activate # or .venv\Scripts\activate on Windows
+source .venv/bin/activate
 uv sync
+
+# Option A: Automatic table creation
 uv run python create_tables.py
+
+# Option B: Manual SQL migration and seed (Recommended for Demo)
+# Run the init_db.sql file against your MySQL database
+mysql -u your_user -p your_database < ../init_db.sql
+
 uvicorn main:app --reload
 ```
 

@@ -65,7 +65,7 @@ export function EnhancedFormDemo() {
       setTimeout(() => {
         setSubmitResult({
           success: true,
-          message: "🎉 Campaign created successfully! Your campaign is now pending review."
+          message: " Campaign created successfully! Your campaign is now pending review."
         });
         setSubmitting(false);
         reset();
@@ -88,7 +88,7 @@ export function EnhancedFormDemo() {
     <div className="enhanced-form-demo max-w-2xl mx-auto p-6">
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold text-ink-900 mb-4">
-          ✨ Enhanced Form Validation Demo
+           Enhanced Form Validation Demo
         </h1>
         <p className="text-muted">
           Experience real-time validation, smart error messages, and improved UX patterns.
@@ -170,30 +170,27 @@ export function EnhancedFormDemo() {
               onChange={(e) => handleChange('description', e.target.value)}
               onBlur={() => handleBlur('description')}
               rows={4}
-              className={`input w-full resize-none ${
-                touched.description && errors.description ? 'error' : ''
-              } ${
-                touched.description && !errors.description && values.description ? 'success' : ''
-              }`}
+              className={`input w-full resize-none ${touched.description && errors.description ? 'error' : ''
+                } ${touched.description && !errors.description && values.description ? 'success' : ''
+                }`}
             />
             {touched.description && errors.description && (
               <span className="error-text text-xs mt-1 block">{errors.description}</span>
             )}
             {touched.description && !errors.description && values.description && (
-              <span className="text-xs text-success mt-1 block">✓ Looks great!</span>
+              <span className="text-xs text-success mt-1 block">Success Looks great!</span>
             )}
           </div>
 
           {/* Form Status */}
           {submitResult && (
-            <div className={`p-4 rounded-lg border ${
-              submitResult.success
+            <div className={`p-4 rounded-lg border ${submitResult.success
                 ? 'bg-success-50 border-success-200 text-success-800'
                 : 'bg-error-50 border-error-200 text-error-800'
-            }`}>
+              }`}>
               <div className="flex items-center gap-2">
                 <span className="text-lg">
-                  {submitResult.success ? '✅' : '❌'}
+                  {submitResult.success ? 'Yes' : 'No'}
                 </span>
                 <span className="font-medium">{submitResult.message}</span>
               </div>
@@ -224,13 +221,12 @@ export function EnhancedFormDemo() {
 
           {/* Form Validation Status */}
           <div className="text-center">
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
-              isValid && Object.keys(touched).length > 0
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm ${isValid && Object.keys(touched).length > 0
                 ? 'bg-success-100 text-success-700'
                 : 'bg-warning-100 text-warning-700'
-            }`}>
+              }`}>
               <span>
-                {isValid && Object.keys(touched).length > 0 ? '✅' : '⏳'}
+                {isValid && Object.keys(touched).length > 0 ? 'Yes' : 'Wait'}
               </span>
               <span>
                 {isValid && Object.keys(touched).length > 0
@@ -244,31 +240,31 @@ export function EnhancedFormDemo() {
 
       {/* Feature Highlights */}
       <div className="mt-8 space-y-4">
-        <h3 className="text-lg font-semibold text-ink-900">✨ Enhanced Features:</h3>
+        <h3 className="text-lg font-semibold text-ink-900"> Enhanced Features:</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div className="p-4 bg-ink-50 rounded-lg">
-            <h4 className="font-semibold mb-2">🚀 Real-time Validation</h4>
+            <h4 className="font-semibold mb-2"> Real-time Validation</h4>
             <p className="text-muted">
               Fields validate as you type with smart debouncing to avoid flickering errors.
             </p>
           </div>
 
           <div className="p-4 bg-ink-50 rounded-lg">
-            <h4 className="font-semibold mb-2">🎯 Smart Error States</h4>
+            <h4 className="font-semibold mb-2"> Smart Error States</h4>
             <p className="text-muted">
               Errors only show after interaction, with immediate clearing when fixed.
             </p>
           </div>
 
           <div className="p-4 bg-ink-50 rounded-lg">
-            <h4 className="font-semibold mb-2">✅ Success Feedback</h4>
+            <h4 className="font-semibold mb-2">Success Feedback</h4>
             <p className="text-muted">
               Visual confirmation when fields are correctly filled out.
             </p>
           </div>
 
           <div className="p-4 bg-ink-50 rounded-lg">
-            <h4 className="font-semibold mb-2">🔄 Loading States</h4>
+            <h4 className="font-semibold mb-2">Loading States</h4>
             <p className="text-muted">
               Clear feedback during validation and form submission processes.
             </p>

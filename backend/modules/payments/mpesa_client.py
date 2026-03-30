@@ -155,7 +155,7 @@ class PaymentService:
         amount: Decimal,
         account_reference: str,
         transaction_desc: str,
-        paybill_number: str
+        paybill_number: str = None  # Now ignored for collection, using platform shortcode
     ) -> STKPushResponse:
         if PaymentService._is_mock_mode():
             checkout_request_id = f"ws_CO_{uuid.uuid4().hex[:20].upper()}"
@@ -164,14 +164,18 @@ class PaymentService:
             return STKPushResponse(
                 checkout_request_id=checkout_request_id,
                 merchant_request_id=merchant_request_id,
+                status="Success",
                 response_code="0",
                 response_description="Success. Request accepted for processing",
                 customer_message="Success. Request accepted for processing"
             )
 
-        shortcode = paybill_number or settings.MPESA_SHORTCODE
+        # SECURITY FIX: Always use platform's primary collection shortcode
+        # This ensures settings.MPESA_PASSKEY is always valid for this shortcode.
+        shortcode = settings.MPESA_SHORTCODE
         if not shortcode:
-            raise PaymentError("Missing paybill number / MPESA_SHORTCODE for STK Push")
+            raise PaymentError("Missing MPESA_SHORTCODE for platform collection")
+        
         PaymentService._require_setting(settings.MPESA_PASSKEY, "MPESA_PASSKEY")
         callback_url = PaymentService._require_setting(settings.MPESA_CALLBACK_URL, "MPESA_CALLBACK_URL")
 
@@ -191,8 +195,8 @@ class PaymentService:
             "PartyB": shortcode,
             "PhoneNumber": normalized_phone,
             "CallBackURL": callback_url,
-            "AccountReference": account_reference[:12],
-            "TransactionDesc": transaction_desc[:182]
+            "AccountReference": account_reference[:12] if account_reference else "LipaTrust",
+            "TransactionDesc": transaction_desc[:182] if transaction_desc else "Contribution"
         }
 
         response = PaymentService._daraja_post("/mpesa/stkpush/v1/processrequest", payload)

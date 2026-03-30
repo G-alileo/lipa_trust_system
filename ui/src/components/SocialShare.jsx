@@ -33,12 +33,12 @@ export function SocialShareButton({
   };
 
   const platformIcons = {
-    whatsapp: "📱",
-    twitter: "🐦",
-    facebook: "👥",
-    linkedin: "💼",
-    telegram: "✈️",
-    email: "📧"
+    whatsapp: "WhatsApp",
+    twitter: "Twitter",
+    facebook: "Facebook",
+    linkedin: "LinkedIn",
+    telegram: "Telegram",
+    email: "Email"
   };
 
   const platformNames = {
@@ -108,7 +108,7 @@ export function SocialShareMenu({
 
   const defaultTrigger = (
     <Button variant="ghost" size="sm" className="gap-2">
-      <span>🔗</span>
+      <span>Link</span>
       Share
     </Button>
   );
@@ -164,7 +164,7 @@ export function SocialShareMenu({
                 }}
                 className="w-full text-left p-2 text-sm text-ink-600 hover:text-ink-900 hover:bg-ink-100 rounded-md transition-colors flex items-center gap-2"
               >
-                <span>📋</span>
+                <span></span>
                 Copy link
               </button>
             </div>
@@ -187,7 +187,7 @@ export function ShareButton({
   const progress = Math.round((currentAmount / targetAmount) * 100);
 
   const shareTitle = `Help support: ${campaignTitle}`;
-  const shareDescription = `${campaignTitle} has raised ${progress}% of its goal! Every contribution makes a difference. Join us in making an impact! 🎯`;
+  const shareDescription = `${campaignTitle} has raised ${progress}% of its goal! Every contribution makes a difference. Join us in making an impact! `;
 
   const hashtags = ['LipaTrust', 'Crowdfunding', 'MakeADifference', 'Community'];
 
@@ -200,7 +200,7 @@ export function ShareButton({
       className={className}
       trigger={
         <Button variant="ghost" className="gap-2 engagement-pulse">
-          <span>🚀</span>
+          <span></span>
           Share Campaign
         </Button>
       }
@@ -216,8 +216,8 @@ export function ProgressShareButton({
   className = ""
 }) {
   const shareUrl = `${window.location.origin}/campaign/${campaignId}`;
-  const shareTitle = `🎉 Milestone Reached!`;
-  const shareDescription = `Amazing news! ${campaignTitle} just reached ${milestone}% funding! The community support is incredible. Check it out and join the movement! 📈`;
+  const shareTitle = ` Milestone Reached!`;
+  const shareDescription = `Amazing news! ${campaignTitle} just reached ${milestone}% funding! The community support is incredible. Check it out and join the movement! `;
 
   const hashtags = ['LipaTrust', 'Milestone', 'Success', 'Community'];
 
@@ -230,7 +230,7 @@ export function ProgressShareButton({
       className={className}
       trigger={
         <Button variant="primary" size="sm" className="gap-2">
-          <span>🎉</span>
+          <span></span>
           Share Progress
         </Button>
       }

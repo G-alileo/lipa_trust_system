@@ -24,16 +24,16 @@ export function ProgressCelebration({
   const handleClose = () => {
     setShow(false);
     if (onClose) {
-      setTimeout(onClose, 300); 
+      setTimeout(onClose, 300);
     }
   };
 
   const getMilestoneEmoji = (milestone) => {
-    if (milestone >= 100) return "🎉";
-    if (milestone >= 75) return "🚀";
-    if (milestone >= 50) return "📈";
-    if (milestone >= 25) return "⭐";
-    return "🎯";
+    if (milestone >= 100) return "Goal Achieved";
+    if (milestone >= 75) return "Rising Star";
+    if (milestone >= 50) return "Halfway There";
+    if (milestone >= 25) return "Starting Strong";
+    return "Target";
   };
 
   const getMilestoneMessage = (milestone) => {
@@ -86,7 +86,7 @@ export function ProgressCelebration({
               <Button
                 variant="ghost"
                 onClick={() => {
-                  const shareText = `🎉 ${campaignTitle} just reached ${milestone}% funding on LipaTrust! Join the movement:`;
+                  const shareText = `${campaignTitle} just reached ${milestone}% funding on LipaTrust! Join the movement:`;
                   if (navigator.share) {
                     navigator.share({
                       title: "Campaign Milestone",
@@ -177,7 +177,7 @@ export function AchievementBadge({
     >
       <div className="achievement-content p-4 text-center">
         <div className={`achievement-icon text-3xl mb-2 ${unlocked ? '' : 'grayscale opacity-50'}`}>
-          {unlocked ? icon : '🔒'}
+          {unlocked ? icon : 'Locked'}
         </div>
 
         <h4 className={`font-semibold text-sm ${unlocked ? 'text-ink-900' : 'text-ink-500'}`}>
@@ -246,11 +246,10 @@ export function MilestoneTracker({
           {milestones.map(milestone => (
             <div
               key={milestone}
-              className={`text-xs ${
-                percentage >= milestone
+              className={`text-xs ${percentage >= milestone
                   ? 'text-success font-semibold'
                   : 'text-muted'
-              }`}
+                }`}
               style={{ marginLeft: milestone === 0 ? '0' : '-5px' }}
             >
               {milestone}%

@@ -120,7 +120,7 @@ export function FormField({
               </span>
             )}
             {fieldState === "success" && (
-              <span className="text-xs text-success">✓</span>
+              <span className="text-xs text-success">OK</span>
             )}
           </div>
         }

@@ -83,23 +83,25 @@ export function CreateCampaignView() {
                     </div>
 
                     <div style={{ background: "var(--ink-100)", padding: "1.5rem", borderRadius: "1rem" }}>
-                        <h4 style={{ marginBottom: "1rem" }}>Financial Verification</h4>
+                        <h4 style={{ marginBottom: "1rem" }}>Financial Verification & Settlement</h4>
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
                             <Input
-                                label="Your M-Pesa Paybill/Till"
+                                label="Your Settlement Paybill/Till"
                                 placeholder="e.g. 123456"
                                 value={formData.paybill_number}
                                 onChange={e => setFormData(p => ({ ...p, paybill_number: e.target.value }))}
+                                required
                             />
                             <Input
                                 label="Account Reference"
                                 placeholder="e.g. HOSPITAL_BILL"
                                 value={formData.account_reference}
                                 onChange={e => setFormData(p => ({ ...p, account_reference: e.target.value }))}
+                                required
                             />
                         </div>
-                        <p className="muted" style={{ fontSize: "0.75rem", marginTop: "1rem" }}>
-                            LipaTrust will verify this number with the Safaricom Directory before activation.
+                        <p className="muted" style={{ fontSize: "0.8rem", marginTop: "1rem", lineHeight: "1.4" }}>
+                            <strong>LipaTrust Model:</strong> For maximum security, we collect all contributions through our platform's verified shortcode. Once your campaign milestones are verified, we disburse the funds directly to your provided Paybill/Till number.
                         </p>
                     </div>
 
