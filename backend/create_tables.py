@@ -465,3 +465,4 @@ if __name__ == "__main__":
             print("Usage: python create_tables.py [seed|reset]")
     else:
         create_tables()
+        seed_demo_data()
